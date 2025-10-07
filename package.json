@@ -1,0 +1,22 @@
+{
+  "name": "maguiweb",
+  "version": "1.0.0",
+  "description": "高端工业级磁检测仪器控制软件 - Web版",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server -p 8080 -o",
+    "start": "npx http-server -p 8080",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "magnetic-testing",
+    "NDT",
+    "industrial",
+    "supabase"
+  ],
+  "author": "AI Full-Stack Developer",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
