@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>DOPPLER 磁检测仪器控制系统</title>
+    <meta name="description" content="工业级磁检测仪器Web控制系统，符合ISO 9934-1:2016国际标准">
+    
+    <!-- 本地CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/industrial.css">
+    <link rel="stylesheet" href="css/modal.css">
+    
+    <!-- 第三方库 CDN -->
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- ECharts 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    
+    <!-- jsPDF 报告生成 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- SheetJS Excel导出 -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <!-- 仪器容器 -->
+    <div class="instrument-container" id="app">
+        <!-- 仪器外框（橙色边框） -->
+        <div class="instrument-frame">
+            <!-- 顶部品牌Logo区域 -->
+            <div class="top-bar">
+                <div class="logo-badge">@NOVASCAN</div>
+            </div>
+            
+            <!-- 仪器主体 -->
+            <div class="instrument-body">
+                <!-- 左侧功能按钮面板 -->
+                <div class="button-panel-left">
+                    <button class="btn-function" id="btn-play" data-shortcut="F1" title="播放/暂停 (F1)">
+                        <span class="btn-icon">▶</span>
+                    </button>
+                    <button class="btn-function" id="btn-upload" data-shortcut="F2" title="上传 (F2)">
+                        <span class="btn-icon">↑</span>
+                    </button>
+                    <button class="btn-function" id="btn-disp" data-shortcut="F3" title="显示模式 (F3)">
+                        <span class="btn-text">DISP</span>
+                    </button>
+                    <button class="btn-function" id="btn-ground" data-shortcut="F4" title="接地 (F4)">
+                        <span class="btn-icon">⏚</span>
+                    </button>
+                    <button class="btn-function" id="btn-gate" data-shortcut="F5" title="门控 (F5)">
+                        <span class="btn-text">GATE</span>
+                    </button>
+                    <button class="btn-function" id="btn-vpa" data-shortcut="F6" title="VPA (F6)">
+                        <span class="btn-text">VPA</span>
+                    </button>
+                </div>
+                
+                <!-- 中央主显示区域 -->
+                <div class="main-display-container">
+                    <!-- 顶部数据表格 -->
+                    <div class="data-table-header">
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>参数</th>
+                                    <th>通道1</th>
+                                    <th>通道2</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>幅值</td>
+                                    <td id="ch1-amplitude">0.0 mV</td>
+                                    <td id="ch2-amplitude">0.0 mV</td>
+                                    <td id="status-indicator" class="status-idle">待机</td>
+                                </tr>
+                                <tr>
+                                    <td>峰值</td>
+                                    <td id="ch1-peak">0.0 mV</td>
+                                    <td id="ch2-peak">0.0 mV</td>
+                                    <td id="experiment-name">未加载实验</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- 主屏幕内容区域 -->
+                    <div class="main-screen">
+                        <!-- 欢迎界面 -->
+                        <div id="screen-welcome" class="screen-view active">
+                            <div class="welcome-content">
+                                <div class="welcome-icon">D</div>
+                                <h1>DOPPLER 磁检测系统</h1>
+                                <p class="version">Web版本 v1.0.0</p>
+                                <p class="standard">符合 ISO 9934-1:2016 国际标准</p>
+                                <div class="welcome-actions">
+                                    <button class="btn-primary" onclick="showScreen('experiment-list')">
+                                        开始检测
+                                    </button>
+                                    <button class="btn-secondary" onclick="showScreen('signal-chart')">
+                                        查看波形
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 波形图显示界面 -->
+                        <div id="screen-signal-chart" class="screen-view">
+                            <div class="screen-header">
+                                <h2>磁信号波形监测</h2>
+                                <div class="screen-actions">
+                                    <button class="btn-small" onclick="toggleChannel()">切换通道</button>
+                                    <button class="btn-small" onclick="resetZoom()">重置缩放</button>
+                                    <button class="btn-small" onclick="showScreen('welcome')">返回</button>
+                                </div>
+                            </div>
+                            <!-- ECharts 波形图容器 -->
+                            <div id="signal-chart" class="signal-chart"></div>
+                        </div>
+                        
+                        <!-- 实验列表界面 -->
+                        <div id="screen-experiment-list" class="screen-view">
+                            <div class="screen-header">
+                                <h2>实验项目管理</h2>
+                                <div class="screen-actions">
+                                    <button class="btn-small btn-primary" onclick="showCreateExperimentForm()">
+                                        新建实验
+                                    </button>
+                                    <button class="btn-small" onclick="showScreen('welcome')">返回</button>
+                                </div>
+                            </div>
+                            <!-- 搜索框 -->
+                            <div class="search-box">
+                                <input type="text" id="experiment-search" placeholder="搜索项目名称、工件名称..." onkeyup="searchExperiments()">
+                            </div>
+                            <!-- 实验列表 -->
+                            <div id="experiment-list" class="experiment-list">
+                                <div class="loading">加载中...</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 新建实验表单界面 -->
+                        <div id="screen-create-experiment" class="screen-view">
+                            <div class="screen-header">
+                                <h2>新建实验项目</h2>
+                            </div>
+                            <form id="create-experiment-form" class="form-container" onsubmit="createExperiment(event)">
+                                <div class="form-section">
+                                    <h3>基本信息</h3>
+                                    <div class="form-group">
+                                        <label>项目名称 <span class="required">*</span></label>
+                                        <input type="text" name="project_name" required placeholder="例如：钢板焊缝检测-2025-10-07">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>工件名称 <span class="required">*</span></label>
+                                        <input type="text" name="workpiece_name" required placeholder="例如：Q345钢板">
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>工件材料</label>
+                                            <input type="text" name="workpiece_material" placeholder="例如：Q345">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>批次号</label>
+                                            <input type="text" name="batch_number" placeholder="例如：20251007-001">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3>检测标准</h3>
+                                    <div class="form-group">
+                                        <label>检测标准</label>
+                                        <input type="text" name="standard_reference" value="ISO 9934-1:2016">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3>操作人员</h3>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>操作员姓名 <span class="required">*</span></label>
+                                            <input type="text" name="operator_name" required placeholder="姓名">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>操作员资质</label>
+                                            <input type="text" name="operator_cert" placeholder="证书编号">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3>磁化参数</h3>
+                                    <div class="form-group">
+                                        <label>磁化方式 <span class="required">*</span></label>
+                                        <select name="magnetization_method" required>
+                                            <option value="直流磁化">直流磁化</option>
+                                            <option value="交流磁化">交流磁化</option>
+                                            <option value="脉冲磁化">脉冲磁化</option>
+                                            <option value="剩磁法">剩磁法</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>磁化电流 (mA)</label>
+                                            <input type="number" name="magnetization_current" min="0" max="2000" placeholder="0-2000">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>磁化频率 (Hz)</label>
+                                            <input type="number" name="magnetization_frequency" min="0" max="1000" step="0.1" placeholder="0-1000">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">保存实验</button>
+                                    <button type="button" class="btn-secondary" onclick="showScreen('experiment-list')">取消</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧控制按钮面板 -->
+                <div class="button-panel-right">
+                    <button class="btn-control" id="btn-back" title="回退 (Esc)">
+                        <span class="btn-icon">↶</span>
+                    </button>
+                    <button class="btn-control" id="btn-save" title="保存 (Ctrl+S)">
+                        <span class="btn-text">SAVE</span>
+                    </button>
+                    <button class="btn-control" id="btn-menu" title="菜单 (Ctrl+M)">
+                        <span class="btn-text">MENU</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 底部品牌标识 -->
+            <div class="brand-footer">
+                <div class="brand-logo">DOPPLER</div>
+                <div class="indicator-dots">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 通知提示容器 -->
+    <div id="notification-container"></div>
+    
+    <!-- 本地JavaScript模块 -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/signal-chart.js"></script>
+    <script src="js/data-manager.js"></script>
+    <script src="js/defect-manager.js"></script>
+    <script src="js/parameter-config.js"></script>
+    <script src="js/report-generator.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
