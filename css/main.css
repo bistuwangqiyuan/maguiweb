@@ -122,6 +122,34 @@ body {
     letter-spacing: 2px;
 }
 
+/* 帮助按钮 */
+.help-button {
+    margin-left: auto;
+    padding: 6px 16px;
+    background: var(--primary-orange);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.help-button:hover {
+    background: var(--primary-orange-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--primary-orange-glow);
+}
+
+.help-button:active {
+    transform: translateY(0);
+}
+
 .instrument-body {
     flex: 1;
     display: flex;

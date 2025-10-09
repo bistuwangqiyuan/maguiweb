@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用户操作手册 - 磁检测仪器Web界面系统</title>
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    body {
+      font-family: 'Microsoft YaHei', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .help-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      gap: 20px;
+      min-height: calc(100vh - 40px);
+    }
+
+    /* 侧边导航 */
+    .sidebar {
+      width: 280px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 20px;
+      position: sticky;
+      top: 20px;
+      height: fit-content;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+    }
+
+    .sidebar h2 {
+      margin: 0 0 20px 0;
+      padding-bottom: 15px;
+      border-bottom: 3px solid #667eea;
+      color: #2d3748;
+      font-size: 20px;
+    }
+
+    .nav-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .nav-menu li {
+      margin: 8px 0;
+    }
+
+    .nav-menu a {
+      display: block;
+      padding: 10px 15px;
+      color: #4a5568;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+
+    .nav-menu a:hover {
+      background: #f7fafc;
+      color: #667eea;
+      transform: translateX(5px);
+    }
+
+    .nav-menu a.active {
+      background: #667eea;
+      color: white;
+      font-weight: 600;
+    }
+
+    .nav-submenu {
+      list-style: none;
+      padding-left: 20px;
+      margin-top: 5px;
+    }
+
+    .nav-submenu a {
+      font-size: 13px;
+      padding: 6px 12px;
+    }
+
+    /* 主内容区 */
+    .main-content {
+      flex: 1;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    /* 顶部标题 */
+    .page-header {
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #e2e8f0;
+    }
+
+    .page-header h1 {
+      margin: 0 0 10px 0;
+      color: #1a202c;
+      font-size: 32px;
+    }
+
+    .page-header .subtitle {
+      color: #718096;
+      font-size: 16px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #667eea;
+      color: white;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* 返回按钮 */
+    .back-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+      padding: 10px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+      z-index: 1000;
+    }
+
+    .back-button:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+    }
+
+    /* 内容样式 */
+    .content-section {
+      margin-bottom: 50px;
+    }
+
+    .content-section h2 {
+      color: #2d3748;
+      font-size: 28px;
+      margin: 40px 0 20px 0;
+      padding-left: 15px;
+      border-left: 5px solid #667eea;
+    }
+
+    .content-section h3 {
+      color: #4a5568;
+      font-size: 22px;
+      margin: 30px 0 15px 0;
+    }
+
+    .content-section h4 {
+      color: #718096;
+      font-size: 18px;
+      margin: 20px 0 12px 0;
+    }
+
+    .content-section p {
+      line-height: 1.8;
+      color: #4a5568;
+      margin: 15px 0;
+    }
+
+    /* 功能卡片 */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .feature-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 25px;
+      border-radius: 12px;
+      color: white;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature-card h4 {
+      color: white;
+      margin: 0 0 10px 0;
+      font-size: 18px;
+    }
+
+    .feature-card p {
+      color: rgba(255,255,255,0.9);
+      margin: 0;
+      font-size: 14px;
+    }
+
+    /* 步骤指南 */
+    .step-guide {
+      margin: 30px 0;
+    }
+
+    .step-item {
+      background: #f7fafc;
+      padding: 25px;
+      margin: 20px 0;
+      border-radius: 12px;
+      border-left: 5px solid #667eea;
+      position: relative;
+    }
+
+    .step-number {
+      position: absolute;
+      left: -15px;
+      top: 20px;
+      width: 40px;
+      height: 40px;
+      background: #667eea;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 18px;
+      box-shadow: 0 2px 10px rgba(102,126,234,0.3);
+    }
+
+    .step-item h4 {
+      margin: 0 0 15px 30px;
+      color: #2d3748;
+    }
+
+    .step-item p, .step-item ul {
+      margin-left: 30px;
+      color: #4a5568;
+    }
+
+    /* 界面模拟图 */
+    .ui-mockup {
+      background: #1a202c;
+      color: #e2e8f0;
+      padding: 30px;
+      border-radius: 12px;
+      margin: 30px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .ui-mockup pre {
+      margin: 0;
+      white-space: pre;
+    }
+
+    /* 波形图示例 */
+    .waveform-demo {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 30px;
+      margin: 30px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .waveform-canvas {
+      width: 100%;
+      height: 250px;
+      background: #f7fafc;
+      border-radius: 8px;
+      position: relative;
+      margin: 20px 0;
+    }
+
+    /* 提示框 */
+    .info-box {
+      padding: 20px 25px;
+      margin: 25px 0;
+      border-radius: 12px;
+      border-left: 5px solid;
+    }
+
+    .info-box.success {
+      background: #f0fdf4;
+      border-color: #22c55e;
+      color: #166534;
+    }
+
+    .info-box.warning {
+      background: #fffbeb;
+      border-color: #f59e0b;
+      color: #92400e;
+    }
+
+    .info-box.error {
+      background: #fef2f2;
+      border-color: #ef4444;
+      color: #991b1b;
+    }
+
+    .info-box.info {
+      background: #eff6ff;
+      border-color: #3b82f6;
+      color: #1e40af;
+    }
+
+    .info-box strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    /* 表格 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    table thead {
+      background: #667eea;
+      color: white;
+    }
+
+    table th, table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    table tbody tr:hover {
+      background: #f7fafc;
+    }
+
+    table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* 代码块 */
+    code {
+      background: #f7fafc;
+      padding: 3px 8px;
+      border-radius: 4px;
+      color: #e53e3e;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+
+    pre {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    pre code {
+      background: none;
+      color: inherit;
+      padding: 0;
+    }
+
+    /* 快捷键展示 */
+    .keyboard-key {
+      display: inline-block;
+      padding: 4px 10px;
+      background: #2d3748;
+      color: white;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0 3px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    /* 按钮样式 */
+    .demo-button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .demo-button.primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .demo-button.primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+    }
+
+    /* 搜索框 */
+    .search-box {
+      margin: 20px 0;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 40px 12px 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .search-box::after {
+      content: '🔍';
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* 响应式 */
+    @media (max-width: 1024px) {
+      .help-container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        position: static;
+        max-height: none;
+      }
+
+      .back-button {
+        position: static;
+        display: block;
+        margin: 20px auto;
+        width: fit-content;
+      }
+    }
+
+    /* 图标 */
+    .icon {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-button">← 返回系统</a>
+
+  <div class="help-container">
+    <!-- 侧边导航 -->
+    <aside class="sidebar">
+      <h2>📘 帮助目录</h2>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="搜索帮助内容...">
+      </div>
+      <ul class="nav-menu">
+        <li><a href="#intro" class="active">系统简介</a></li>
+        <li><a href="#quickstart">快速入门</a></li>
+        <li><a href="#interface">界面总览</a></li>
+        <li>
+          <a href="#examples">操作示例</a>
+          <ul class="nav-submenu">
+            <li><a href="#example1">钢板焊缝检测</a></li>
+            <li><a href="#example2">查看历史记录</a></li>
+            <li><a href="#example3">生成检测报告</a></li>
+          </ul>
+        </li>
+        <li><a href="#features">功能详解</a></li>
+        <li><a href="#parameters">参数配置</a></li>
+        <li><a href="#shortcuts">快捷键</a></li>
+        <li><a href="#faq">常见问题</a></li>
+        <li><a href="#support">技术支持</a></li>
+      </ul>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+      <div class="page-header">
+        <h1>📘 磁检测仪器Web界面系统 - 用户操作手册</h1>
+        <div class="subtitle">
+          <span class="badge">V1.1</span>
+          <span>更新日期：2025-10-08</span>
+          <span>在线访问：<a href="https://maguiweb.netlify.app" target="_blank">maguiweb.netlify.app</a></span>
+        </div>
+      </div>
+
+      <!-- 系统简介 -->
+      <section id="intro" class="content-section">
+        <h2>🎯 系统简介</h2>
+        
+        <p>磁检测仪器Web界面系统是一款专业的<strong>无损检测（NDT）</strong>工业软件，用于钢铁材料的磁粉检测。系统采用现代Web技术开发，可在任何设备的浏览器中运行，无需安装客户端软件。</p>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h4>🌊 实时信号监测</h4>
+            <p>双通道磁信号波形实时显示，刷新率≥30fps，流畅清晰</p>
+          </div>
+          <div class="feature-card">
+            <h4>🔍 智能缺陷检测</h4>
+            <p>自动识别超阈值信号并标记，提供声音提示</p>
+          </div>
+          <div class="feature-card">
+            <h4>📊 项目管理</h4>
+            <p>创建、编辑、搜索实验记录，云端数据持久化</p>
+          </div>
+          <div class="feature-card">
+            <h4>⚙️ 灵活配置</h4>
+            <p>丰富的检测参数设置，支持多种磁化方式</p>
+          </div>
+          <div class="feature-card">
+            <h4>📄 报告生成</h4>
+            <p>一键生成专业检测报告，支持PDF/Word格式</p>
+          </div>
+          <div class="feature-card">
+            <h4>☁️ 云端存储</h4>
+            <p>基于Supabase的数据存储，支持多设备同步</p>
+          </div>
+        </div>
+
+        <div class="info-box info">
+          <strong>💡 适用场景</strong>
+          <ul>
+            <li>🏭 钢板焊缝检测</li>
+            <li>🔩 紧固件表面裂纹检测</li>
+            <li>⚙️ 机械零件疲劳裂纹检测</li>
+            <li>🚂 轨道交通部件检测</li>
+            <li>🏗️ 建筑钢结构质量检测</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 快速入门 -->
+      <section id="quickstart" class="content-section">
+        <h2>🚀 快速入门</h2>
+        
+        <h3>访问系统</h3>
+        <p>您可以通过以下方式访问系统：</p>
+        
+        <div class="info-box success">
+          <strong>✅ 在线访问（推荐）</strong>
+          <p>直接在浏览器中打开：<code>https://maguiweb.netlify.app</code></p>
+          <p>无需安装，随时随地访问</p>
+        </div>
+
+        <div class="info-box info">
+          <strong>💻 本地运行</strong>
+          <pre><code># 1. 下载代码
+git clone &lt;repository-url&gt;
+
+# 2. 进入目录
+cd maguiweb
+
+# 3. 启动服务
+npm run start
+
+# 4. 访问
+打开浏览器访问: http://localhost:8080</code></pre>
+        </div>
+
+        <h3>5分钟快速体验</h3>
+        <div class="step-guide">
+          <div class="step-item">
+            <div class="step-number">1</div>
+            <h4>访问系统</h4>
+            <p>打开浏览器，访问系统URL，自动加载主界面</p>
+          </div>
+
+          <div class="step-item">
+            <div class="step-number">2</div>
+            <h4>创建实验</h4>
+            <p>点击"新建实验"按钮，填写项目名称、工件信息等基本信息</p>
+          </div>
+
+          <div class="step-item">
+            <div class="step-number">3</div>
+            <h4>开始检测</h4>
+            <p>点击▶播放按钮，观察实时波形显示</p>
+          </div>
+
+          <div class="step-item">
+            <div class="step-number">4</div>
+            <h4>标记缺陷</h4>
+            <p>系统自动标记超阈值信号，也可手动点击标记</p>
+          </div>
+
+          <div class="step-item">
+            <div class="step-number">5</div>
+            <h4>生成报告</h4>
+            <p>点击"生成报告"，下载专业PDF检测报告</p>
+          </div>
+        </div>
+
+        <div class="info-box warning">
+          <strong>⚠️ 系统要求</strong>
+          <ul>
+            <li><strong>浏览器</strong>：Chrome 90+ / Firefox 88+ / Edge 90+ （推荐Chrome）</li>
+            <li><strong>屏幕分辨率</strong>：最小1280×720，推荐1920×1080</li>
+            <li><strong>网络</strong>：稳定的互联网连接，建议≥2Mbps</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 界面总览 -->
+      <section id="interface" class="content-section">
+        <h2>🖥️ 界面总览</h2>
+        
+        <p>系统主界面采用工业级设计，布局清晰，操作便捷：</p>
+
+        <div class="ui-mockup">
+<pre>┌─────────────────────────────────────────────────────────────┐
+│  磁检测仪器控制系统 V1.1           [用户] [设置] [帮助]       │
+├─────────────────────────────────────────────────────────────┤
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │  <span style="color:#4ade80">实时波形显示区 (Signal Chart)</span>                       │    │
+│  │                                                       │    │
+│  │  <span style="color:#60a5fa">通道1</span> ════════════════════════════════              │    │
+│  │         ╱╲    ╱╲    ╱╲    <span style="color:#ef4444">⚠缺陷</span>                      │    │
+│  │  ──────╱──╲──╱──╲──╱──╲────────────────             │    │
+│  │                                                       │    │
+│  │  <span style="color:#60a5fa">通道2</span> ════════════════════════════════              │    │
+│  │        ╱╲      ╱╲      ╱╲                            │    │
+│  │  ─────╱──╲────╱──╲────╱──╲──────────────            │    │
+│  │                                                       │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                               │
+│  ┌──────────────┐  ┌─────────────────────────────────┐      │
+│  │ <span style="color:#fbbf24">控制面板</span>      │  │  <span style="color:#fbbf24">实验信息</span>                        │      │
+│  │              │  │                                  │      │
+│  │  <span style="color:#4ade80">▶</span> 播放      │  │  项目: 钢板焊缝检测-A001         │      │
+│  │  <span style="color:#fbbf24">⏸</span> 暂停      │  │  工件: Q345钢板                  │      │
+│  │  <span style="color:#ef4444">⏹</span> 停止      │  │  操作员: 张三                     │      │
+│  │  ⏮ 后退      │  │  状态: <span style="color:#4ade80">进行中</span>                     │      │
+│  │  ⏭ 前进      │  │  已发现缺陷: <span style="color:#ef4444">3个</span>                  │      │
+│  │  🔄 重置     │  │                                  │      │
+│  └──────────────┘  └─────────────────────────────────┘      │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │  <span style="color:#fbbf24">参数配置</span>                                            │    │
+│  │  磁化方式: [直流磁化 ▼]  电流: [1000] mA          │    │
+│  │  频率: [50] Hz          阈值: [80] %              │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                               │
+│  [<span style="color:#60a5fa">新建实验</span>] [保存] [导出] [<span style="color:#4ade80">生成报告</span>] [历史记录]          │
+└─────────────────────────────────────────────────────────────┘</pre>
+        </div>
+
+        <h3>界面区域说明</h3>
+        
+        <h4>1️⃣ 波形显示区（核心区域）</h4>
+        <ul>
+          <li><strong>双通道显示</strong>：同时显示2路磁信号</li>
+          <li><strong>实时更新</strong>：30fps刷新率，流畅显示</li>
+          <li><strong>缺陷标记</strong>：超阈值信号自动标记为⚠️</li>
+          <li><strong>交互功能</strong>：鼠标滚轮缩放、拖拽平移、点击标记</li>
+        </ul>
+
+        <h4>2️⃣ 控制面板</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>按钮</th>
+              <th>功能</th>
+              <th>快捷键</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>▶ 播放</td>
+              <td>开始采集信号</td>
+              <td><span class="keyboard-key">Space</span></td>
+            </tr>
+            <tr>
+              <td>⏸ 暂停</td>
+              <td>暂停采集（数据保留）</td>
+              <td><span class="keyboard-key">Space</span></td>
+            </tr>
+            <tr>
+              <td>⏹ 停止</td>
+              <td>停止采集（返回初始）</td>
+              <td><span class="keyboard-key">S</span></td>
+            </tr>
+            <tr>
+              <td>🔄 重置</td>
+              <td>清空当前数据</td>
+              <td><span class="keyboard-key">R</span></td>
+            </tr>
+            <tr>
+              <td>🔍 放大/缩小</td>
+              <td>调整波形显示比例</td>
+              <td><span class="keyboard-key">+</span> / <span class="keyboard-key">-</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>3️⃣ 实验信息面板</h4>
+        <p>实时显示当前实验的关键信息、检测状态和已发现的缺陷数量。</p>
+
+        <h4>4️⃣ 参数配置面板</h4>
+        <ul>
+          <li><strong>磁化方式</strong>：直流/交流/脉冲磁化</li>
+          <li><strong>磁化电流</strong>：0-2000mA可调</li>
+          <li><strong>检测阈值</strong>：0-100%可调</li>
+          <li><strong>信号增益</strong>：0.1-10×可调</li>
+        </ul>
+      </section>
+
+      <!-- 操作示例 -->
+      <section id="examples" class="content-section">
+        <h2>📝 完整操作示例</h2>
+        
+        <h3 id="example1">示例1：钢板焊缝检测完整流程</h3>
+        
+        <div class="info-box info">
+          <strong>📋 检测场景</strong>
+          <ul>
+            <li>检测对象：Q345钢板焊缝</li>
+            <li>工件尺寸：500mm × 300mm × 10mm</li>
+            <li>焊缝长度：450mm</li>
+            <li>检测标准：ISO 9934-1:2016</li>
+            <li>操作员：张三 (证书编号: NDT-001)</li>
+          </ul>
+        </div>
+
+        <div class="step-guide">
+          <div class="step-item">
+            <div class="step-number">1</div>
+            <h4>创建新实验（约2分钟）</h4>
+            <p><strong>操作步骤：</strong></p>
+            <ol>
+              <li>点击界面底部的<span class="demo-button primary">新建实验</span>按钮</li>
+              <li>在弹出的对话框中填写以下信息：</li>
+            </ol>
+            <div class="ui-mockup">
+<pre>┌───────────────────────────────────────┐
+│  新建实验                              │
+├───────────────────────────────────────┤
+│  * 项目名称: [钢板焊缝检测-A001    ]  │
+│  * 工件名称: [Q345钢板-批次20251008]  │
+│  * 工件材质: [Q345                ]  │
+│    工件尺寸: [500×300×10mm        ]  │
+│  * 操作员:   [张三                ]  │
+│    操作员证书: [NDT-001          ]  │
+│  * 磁化方式: [直流磁化 ▼]            │
+│    磁化电流: [1000    ] mA           │
+│    检测标准: [ISO 9934-1:2016    ]  │
+│                                       │
+│  带*为必填项                          │
+│                                       │
+│        [取消]        [<span style="color:#4ade80">创建</span>]           │
+└───────────────────────────────────────┘</pre>
+            </div>
+            <ol start="3">
+              <li>点击<span class="demo-button primary">创建</span>按钮</li>
+              <li>系统验证数据并显示成功提示："实验创建成功！"</li>
+            </ol>
+          </div>
+
+          <div class="step-item">
+            <div class="step-number">2</div>
+            <h4>配置检测参数（约1分钟）</h4>
+            <p><strong>在参数配置面板中设置：</strong></p>
+            <table>
+              <thead>
+                <tr>
+                  <th>参数</th>
+                  <th>推荐值</th>
+                  <th>说明</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>磁化方式</td>
+                  <td>直流磁化</td>
+                  <td>适合厚工件表面检测</td>
+                </tr>
+                <tr>
+                  <td>磁化电流</td>
+                  <td>1000 mA</td>
+                  <td>Q345钢推荐范围</td>
+                </tr>
+                <tr>
+                  <td>信号增益</td>
+                  <td>1.0×</td>
+                  <td>标准增益</td>
+                </tr>
+                <tr>
+                  <td>检测阈值</td>
+                  <td>80%</td>
+                  <td>超过此值标记为缺陷</td>
+                </tr>
+                <tr>
+                  <td>滤波</td>
+                  <td>开启</td>
+                  <td>降低噪声干扰</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>点击<span class="demo-button primary">应用配置</span>保存设置</p>
+          </div>
+
+          <div class="step-item">
+            <div class="step-number">3</div>
+            <h4>开始检测（约8分钟）</h4>
+            <p><strong>操作流程：</strong></p>
+            <ol>
+              <li>准备工件（清洁表面、喷洒磁粉、连接传感器）</li>
+              <li>点击控制面板的<strong style="color:#4ade80">▶ 播放</strong>按钮开始检测</li>
+              <li>观察实时波形显示</li>
+            </ol>
+            
+            <p><strong>正常信号特征：</strong></p>
+            <div class="waveform-demo">
+              <div class="ui-mockup">
+<pre style="background:#1a365d;color:#90cdf4;">
+通道1信号 (幅值: 0-100%)
+100% ┤
+     │
+ 80% ┤ <span style="color:#fbbf24">─────────────────</span> ← 阈值线（红色虚线）
+     │      ╱╲    ╱╲
+ 50% ┤    ╱    ╲╱    ╲
+     │  ╱              ╲
+  0% └─────────────────────→ 时间(s)
+      0    2    4    6    8
+
+<span style="color:#4ade80">特征：</span>
+- 平滑的正弦波形
+- 幅值在30-60%之间
+- 频率稳定</pre>
+              </div>
+            </div>
+
+            <p><strong>发现缺陷时的信号：</strong></p>
+            <div class="waveform-demo">
+              <div class="ui-mockup">
+<pre style="background:#7f1d1d;color:#fca5a5;">
+通道1信号
+100% ┤
+     │           <span style="color:#fde047">⚠️ 缺陷标记</span>
+ 80% ┤          ╱╲  ← 超过阈值
+     │      ╱╲╱  ╲
+ 50% ┤    ╱        ╲╱╲
+     │  ╱              ╲
+  0% └─────────────────────→ 时间(s)
+      0    2    4    6    8
+     
+<span style="color:#fde047">特征：</span>
+- 突然的幅值升高
+- 超过80%阈值线
+- 自动添加⚠️标记
+- 发出声音提示</pre>
+              </div>
+            </div>
+
+            <div class="info-box success">
+              <strong>✅ 系统自动操作</strong>
+              <ul>
+                <li>自动标记缺陷位置</li>
+                <li>记录时间戳和幅值峰值</li>
+                <li>在右侧缺陷列表显示</li>
+                <li>播放声音提示（可设置）</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-number">4</div>
+            <h4>查看缺陷统计</h4>
+            <p>检测完成后，右侧自动显示缺陷统计信息：</p>
+            <div class="ui-mockup">
+<pre>┌────────────────────────────────┐
+│  缺陷统计                       │
+├────────────────────────────────┤
+│  总缺陷数: <span style="color:#ef4444">3个</span>                  │
+│  裂纹: 2个                      │
+│  气孔: 1个                      │
+│                                │
+│  缺陷列表:                      │
+│  ┌──────────────────────────┐ │
+│  │ <span style="color:#fbbf24">#1 裂纹</span>                   │ │
+│  │ 位置: 125.3mm            │ │
+│  │ 幅值: 85.2%              │ │
+│  │ 长度: 2.5mm              │ │
+│  │ 严重度: <span style="color:#fbbf24">⚠️ 中等</span>           │ │
+│  └──────────────────────────┘ │
+│                                │
+│  ┌──────────────────────────┐ │
+│  │ <span style="color:#ef4444">#2 裂纹</span>                   │ │
+│  │ 位置: 287.6mm            │ │
+│  │ 幅值: 92.1%              │ │
+│  │ 长度: 3.8mm              │ │
+│  │ 严重度: <span style="color:#ef4444">🔴 严重</span>           │ │
+│  └──────────────────────────┘ │
+│                                │
+│  [导出列表] [查看详情]         │
+└────────────────────────────────┘</pre>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-number">5</div>
+            <h4>生成检测报告</h4>
+            <ol>
+              <li>点击<span class="demo-button primary">生成报告</span>按钮</li>
+              <li>选择报告类型（简要/详细/技术）</li>
+              <li>选择包含内容（实验信息、波形图表、缺陷列表等）</li>
+              <li>选择报告格式（PDF/Word）</li>
+              <li>点击<span class="demo-button primary">生成</span></li>
+              <li>等待3-5秒后自动下载报告</li>
+            </ol>
+            
+            <div class="info-box success">
+              <strong>📄 报告内容包括：</strong>
+              <ul>
+                <li>实验基本信息和检测参数</li>
+                <li>完整的双通道波形图</li>
+                <li>缺陷详细列表和分析</li>
+                <li>检测结论和处理建议</li>
+                <li>操作员和审核员签字栏</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <h3 id="example2">示例2：查看历史检测记录</h3>
+        <div class="step-guide">
+          <div class="step-item">
+            <div class="step-number">1</div>
+            <h4>打开历史记录</h4>
+            <p>点击界面底部的<span class="demo-button primary">历史记录</span>按钮</p>
+          </div>
+
+          <div class="step-item">
+            <div class="step-number">2</div>
+            <h4>浏览或搜索</h4>
+            <ul>
+              <li>使用搜索框：输入项目名称、工件名称或操作员</li>
+              <li>使用筛选：按日期、状态、操作员筛选</li>
+              <li>点击列表项查看详情</li>
+            </ul>
+          </div>
+
+          <div class="step-item">
+            <div class="step-number">3</div>
+            <h4>查看或导出</h4>
+            <ul>
+              <li>点击"查看"：加载完整实验数据</li>
+              <li>点击"导出"：下载CSV/Excel数据</li>
+              <li>点击"删除"：删除不需要的记录</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 id="example3">示例3：导出数据</h3>
+        <div class="step-guide">
+          <div class="step-item">
+            <div class="step-number">1</div>
+            <h4>选择导出格式</h4>
+            <p>点击<span class="demo-button primary">导出数据</span>，选择格式：</p>
+            <ul>
+              <li><strong>CSV</strong>：Excel兼容，通用性好</li>
+              <li><strong>Excel</strong>：直接在Excel中打开</li>
+              <li><strong>JSON</strong>：程序处理、数据交换</li>
+            </ul>
+          </div>
+
+          <div class="step-item">
+            <div class="step-number">2</div>
+            <h4>选择导出内容</h4>
+            <p>勾选需要导出的内容：</p>
+            <ul>
+              <li>☑ 实验基本信息</li>
+              <li>☑ 检测参数</li>
+              <li>☑ 信号波形数据</li>
+              <li>☑ 缺陷列表</li>
+              <li>☑ 时间戳</li>
+            </ul>
+          </div>
+
+          <div class="step-item">
+            <div class="step-number">3</div>
+            <h4>下载文件</h4>
+            <p>点击"导出"按钮，文件自动下载到本地</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 功能详解 -->
+      <section id="features" class="content-section">
+        <h2>⚙️ 功能详解</h2>
+        
+        <h3>波形颜色说明</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>颜色</th>
+              <th>含义</th>
+              <th>应用场景</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span style="color:#60a5fa">● 蓝色</span></td>
+              <td>正常信号</td>
+              <td>信号幅值在阈值以下</td>
+            </tr>
+            <tr>
+              <td><span style="color:#ef4444">● 红色</span></td>
+              <td>超阈值信号</td>
+              <td>可能存在缺陷</td>
+            </tr>
+            <tr>
+              <td><span style="color:#4ade80">● 绿色</span></td>
+              <td>参考信号</td>
+              <td>对比或校准</td>
+            </tr>
+            <tr>
+              <td><span style="color:#fbbf24">● 黄色</span></td>
+              <td>警告信号</td>
+              <td>接近阈值</td>
+            </tr>
+            <tr>
+              <td><span style="color:#9ca3af">● 灰色</span></td>
+              <td>历史数据</td>
+              <td>已保存的数据</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>缺陷类型识别</h3>
+        
+        <h4>1. 裂纹信号特征</h4>
+        <div class="info-box error">
+          <strong>信号特点</strong>
+          <ul>
+            <li>幅值：突然升高</li>
+            <li>波形：尖峰状</li>
+            <li>持续时间：短暂（<0.5s）</li>
+            <li>处理：必须修复</li>
+          </ul>
+        </div>
+
+        <h4>2. 气孔信号特征</h4>
+        <div class="info-box warning">
+          <strong>信号特点</strong>
+          <ul>
+            <li>幅值：中等升高</li>
+            <li>波形：圆滑峰</li>
+            <li>持续时间：较短（0.2-0.5s）</li>
+            <li>处理：视情况修复</li>
+          </ul>
+        </div>
+
+        <h4>3. 夹渣信号特征</h4>
+        <div class="info-box info">
+          <strong>信号特点</strong>
+          <ul>
+            <li>幅值：不规则</li>
+            <li>波形：多峰</li>
+            <li>持续时间：较长（0.5-2s）</li>
+            <li>处理：评估后处理</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 参数配置 -->
+      <section id="parameters" class="content-section">
+        <h2>🎛️ 参数配置指南</h2>
+        
+        <h3>按材质推荐参数</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>材质</th>
+              <th>磁化方式</th>
+              <th>电流(mA)</th>
+              <th>阈值(%)</th>
+              <th>备注</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Q235钢</td>
+              <td>直流</td>
+              <td>800-1200</td>
+              <td>75-85</td>
+              <td>常用结构钢</td>
+            </tr>
+            <tr>
+              <td>Q345钢</td>
+              <td>直流</td>
+              <td>1000-1500</td>
+              <td>80-90</td>
+              <td>高强度钢</td>
+            </tr>
+            <tr>
+              <td>不锈钢</td>
+              <td>交流</td>
+              <td>1200-1800</td>
+              <td>85-95</td>
+              <td>需更高电流</td>
+            </tr>
+            <tr>
+              <td>铸铁</td>
+              <td>直流</td>
+              <td>1500-2000</td>
+              <td>70-80</td>
+              <td>较脆材料</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>按工件厚度推荐参数</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>厚度(mm)</th>
+              <th>电流(mA)</th>
+              <th>增益</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>&lt;5</td>
+              <td>600-800</td>
+              <td>1.2-1.5</td>
+              <td>薄件高灵敏度</td>
+            </tr>
+            <tr>
+              <td>5-10</td>
+              <td>800-1200</td>
+              <td>1.0-1.2</td>
+              <td>标准厚度</td>
+            </tr>
+            <tr>
+              <td>10-20</td>
+              <td>1200-1600</td>
+              <td>0.8-1.0</td>
+              <td>较厚工件</td>
+            </tr>
+            <tr>
+              <td>&gt;20</td>
+              <td>1600-2000</td>
+              <td>0.5-0.8</td>
+              <td>厚件深层检测</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="info-box warning">
+          <strong>⚠️ 重要提示</strong>
+          <ul>
+            <li>以上参数仅供参考，实际使用时需根据具体情况调整</li>
+            <li>首次检测建议从推荐值中间开始，根据效果微调</li>
+            <li>电流过大可能导致工件发热或磁化过度</li>
+            <li>电流过小可能检测不到缺陷</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 快捷键 -->
+      <section id="shortcuts" class="content-section">
+        <h2>⌨️ 快捷键列表</h2>
+        
+        <h3>基本控制</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>功能</th>
+              <th>快捷键</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>播放/暂停</td>
+              <td><span class="keyboard-key">Space</span></td>
+              <td>切换检测状态</td>
+            </tr>
+            <tr>
+              <td>停止</td>
+              <td><span class="keyboard-key">S</span></td>
+              <td>停止检测</td>
+            </tr>
+            <tr>
+              <td>重置</td>
+              <td><span class="keyboard-key">R</span></td>
+              <td>清空数据</td>
+            </tr>
+            <tr>
+              <td>标记</td>
+              <td><span class="keyboard-key">M</span></td>
+              <td>标记当前位置</td>
+            </tr>
+            <tr>
+              <td>截图</td>
+              <td><span class="keyboard-key">P</span></td>
+              <td>保存截图</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>视图控制</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>功能</th>
+              <th>快捷键</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>放大</td>
+              <td><span class="keyboard-key">+</span></td>
+              <td>放大波形</td>
+            </tr>
+            <tr>
+              <td>缩小</td>
+              <td><span class="keyboard-key">-</span></td>
+              <td>缩小波形</td>
+            </tr>
+            <tr>
+              <td>向左</td>
+              <td><span class="keyboard-key">←</span></td>
+              <td>向左移动</td>
+            </tr>
+            <tr>
+              <td>向右</td>
+              <td><span class="keyboard-key">→</span></td>
+              <td>向右移动</td>
+            </tr>
+            <tr>
+              <td>全屏</td>
+              <td><span class="keyboard-key">F11</span></td>
+              <td>切换全屏</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>文件操作</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>功能</th>
+              <th>快捷键</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>保存</td>
+              <td><span class="keyboard-key">Ctrl</span> + <span class="keyboard-key">S</span></td>
+              <td>保存数据</td>
+            </tr>
+            <tr>
+              <td>新建</td>
+              <td><span class="keyboard-key">Ctrl</span> + <span class="keyboard-key">N</span></td>
+              <td>新建实验</td>
+            </tr>
+            <tr>
+              <td>打开</td>
+              <td><span class="keyboard-key">Ctrl</span> + <span class="keyboard-key">O</span></td>
+              <td>打开历史</td>
+            </tr>
+            <tr>
+              <td>导出</td>
+              <td><span class="keyboard-key">Ctrl</span> + <span class="keyboard-key">E</span></td>
+              <td>导出数据</td>
+            </tr>
+            <tr>
+              <td>打印</td>
+              <td><span class="keyboard-key">Ctrl</span> + <span class="keyboard-key">P</span></td>
+              <td>打印报告</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>帮助</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>功能</th>
+              <th>快捷键</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>帮助</td>
+              <td><span class="keyboard-key">F1</span></td>
+              <td>打开帮助</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 常见问题 -->
+      <section id="faq" class="content-section">
+        <h2>❓ 常见问题</h2>
+        
+        <h3>Q1: 波形显示异常或不更新？</h3>
+        <div class="info-box warning">
+          <strong>可能原因</strong>
+          <ul>
+            <li>网络连接问题</li>
+            <li>浏览器兼容性</li>
+            <li>缓存问题</li>
+          </ul>
+          <strong>解决方案</strong>
+          <ol>
+            <li>检查网络连接</li>
+            <li>刷新页面（F5）</li>
+            <li>清除浏览器缓存</li>
+            <li>尝试更换浏览器（推荐Chrome）</li>
+          </ol>
+        </div>
+
+        <h3>Q2: 无法保存实验数据？</h3>
+        <div class="info-box warning">
+          <strong>可能原因</strong>
+          <ul>
+            <li>网络断开</li>
+            <li>存储空间满</li>
+            <li>权限不足</li>
+          </ul>
+          <strong>解决方案</strong>
+          <ol>
+            <li>检查网络状态</li>
+            <li>导出数据到本地备份</li>
+            <li>清理历史数据释放空间</li>
+            <li>检查用户权限</li>
+          </ol>
+        </div>
+
+        <h3>Q3: 缺陷标记不准确？</h3>
+        <div class="info-box info">
+          <strong>调整方法</strong>
+          <ol>
+            <li>调整检测阈值（降低灵敏度）</li>
+            <li>开启滤波功能减少噪声</li>
+            <li>检查磁化参数是否合适</li>
+            <li>手动重新标记缺陷</li>
+          </ol>
+        </div>
+
+        <h3>Q4: 系统运行缓慢？</h3>
+        <div class="info-box info">
+          <strong>优化方法</strong>
+          <ul>
+            <li>清理历史数据</li>
+            <li>关闭其他浏览器标签页</li>
+            <li>降低采样率</li>
+            <li>使用高性能设备</li>
+            <li>确保网络速度≥2Mbps</li>
+          </ul>
+        </div>
+
+        <h3>Q5: 可以离线使用吗？</h3>
+        <div class="info-box success">
+          <strong>部分功能可离线使用</strong>
+          <p>✅ 可用功能：</p>
+          <ul>
+            <li>查看已缓存的数据</li>
+            <li>生成简要报告</li>
+            <li>导出已加载的数据</li>
+          </ul>
+          <p>❌ 不可用功能：</p>
+          <ul>
+            <li>创建新实验</li>
+            <li>保存到云端</li>
+            <li>同步数据</li>
+            <li>查看其他设备的数据</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 技术支持 -->
+      <section id="support" class="content-section">
+        <h2>📞 技术支持</h2>
+        
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h4>📧 邮件支持</h4>
+            <p>support@example.com</p>
+            <p>24小时内回复</p>
+          </div>
+          <div class="feature-card">
+            <h4>💬 在线聊天</h4>
+            <p>工作日 9:00-18:00</p>
+            <p>实时解答问题</p>
+          </div>
+          <div class="feature-card">
+            <h4>📞 电话支持</h4>
+            <p>400-XXX-XXXX</p>
+            <p>周一至周五 9:00-18:00</p>
+          </div>
+          <div class="feature-card">
+            <h4>📚 培训课程</h4>
+            <p>在线/线下培训</p>
+            <p>系统化学习</p>
+          </div>
+        </div>
+
+        <h3>版本信息</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>版本</th>
+              <th>发布日期</th>
+              <th>主要更新</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>V1.1</td>
+              <td>2025-10-08</td>
+              <td>添加测试框架、E2E测试、代码质量工具、完善用户手册</td>
+            </tr>
+            <tr>
+              <td>V1.0</td>
+              <td>2025-10-01</td>
+              <td>首次发布：实时波形、实验管理、缺陷检测、报告生成</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="info-box success">
+          <strong>💡 获取更多帮助</strong>
+          <ul>
+            <li>访问在线文档中心</li>
+            <li>观看视频教程（快速入门10分钟）</li>
+            <li>参加在线培训课程</li>
+            <li>加入用户交流群</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 底部 -->
+      <div style="margin-top: 60px; padding-top: 30px; border-top: 2px solid #e2e8f0; text-align: center; color: #718096;">
+        <p><strong>感谢使用磁检测仪器Web界面系统！</strong></p>
+        <p>文档版本: V1.1 | 最后更新: 2025-10-08</p>
+        <p>
+          <a href="index.html" class="demo-button primary">返回系统</a>
+          <a href="USER_MANUAL.md" class="demo-button primary" style="background:#764ba2;" download>下载完整手册</a>
+        </p>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // 平滑滚动
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          
+          // 更新active状态
+          document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
+          this.classList.add('active');
+        }
+      });
+    });
+
+    // 搜索功能
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', function(e) {
+      const searchTerm = e.target.value.toLowerCase();
+      const sections = document.querySelectorAll('.content-section');
+      
+      sections.forEach(section => {
+        const text = section.textContent.toLowerCase();
+        if (text.includes(searchTerm) || searchTerm === '') {
+          section.style.display = 'block';
+        } else {
+          section.style.display = 'none';
+        }
+      });
+    });
+
+    // 滚动监听，自动更新导航
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${id}`) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.content-section').forEach(section => {
+      observer.observe(section);
+    });
+  </script>
+</body>
+</html>
+
