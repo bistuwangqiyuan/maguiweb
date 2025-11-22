@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  
+  <!-- 主页 -->
+  <url>
+    <loc>https://maguiweb.netlify.app/</loc>
+    <lastmod>2025-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://maguiweb.netlify.app/assets/images/og-image.png</image:loc>
+      <image:title>DOPPLER磁检测仪器控制系统主界面</image:title>
+      <image:caption>专业工业级磁检测仪器Web控制系统</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- 系统主页 -->
+  <url>
+    <loc>https://maguiweb.netlify.app/index.html</loc>
+    <lastmod>2025-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- 帮助文档 -->
+  <url>
+    <loc>https://maguiweb.netlify.app/help.html</loc>
+    <lastmod>2025-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- PRD文档 -->
+  <url>
+    <loc>https://maguiweb.netlify.app/PRD.md</loc>
+    <lastmod>2025-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- README文档 -->
+  <url>
+    <loc>https://maguiweb.netlify.app/README.md</loc>
+    <lastmod>2025-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- 用户手册 -->
+  <url>
+    <loc>https://maguiweb.netlify.app/USER_MANUAL.md</loc>
+    <lastmod>2025-10-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- 部署文档 -->
+  <url>
+    <loc>https://maguiweb.netlify.app/DEPLOYMENT.md</loc>
+    <lastmod>2025-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <!-- 测试文档 -->
+  <url>
+    <loc>https://maguiweb.netlify.app/TESTING.md</loc>
+    <lastmod>2025-10-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+</urlset>
+

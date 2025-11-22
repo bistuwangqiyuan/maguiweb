@@ -1,0 +1,51 @@
+# Robots.txt for DOPPLER 磁检测仪器控制系统
+# https://maguiweb.netlify.app
+
+# 允许所有搜索引擎爬取
+User-agent: *
+Allow: /
+
+# 特别允许的路径
+Allow: /index.html
+Allow: /help.html
+Allow: /css/
+Allow: /js/
+Allow: /assets/
+
+# 禁止爬取的路径
+Disallow: /node_modules/
+Disallow: /database/
+Disallow: /tests/
+Disallow: /coverage/
+Disallow: /test-results/
+Disallow: /playwright-report/
+Disallow: /.git/
+Disallow: /specs/
+
+# 允许访问Sitemap
+Sitemap: https://maguiweb.netlify.app/sitemap.xml
+
+# 爬取延迟（毫秒）
+Crawl-delay: 1
+
+# 特定搜索引擎配置
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 1
+
+User-agent: 360Spider
+Allow: /
+Crawl-delay: 1
+
+User-agent: Sogou web spider
+Allow: /
+Crawl-delay: 1
+

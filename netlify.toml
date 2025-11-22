@@ -2,36 +2,178 @@
   publish = "."
   command = "echo 'No build required - static site'"
 
+# 自动优化
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+[build.processing.images]
+  compress = true
+
+# SPA重定向规则
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false
+  
+# 301永久重定向（SEO优化）
+[[redirects]]
+  from = "/home"
+  to = "/"
+  status = 301
 
+[[redirects]]
+  from = "/index"
+  to = "/"
+  status = 301
+
+# HTML文档安全头部和SEO优化
 [[headers]]
   for = "/*"
   [headers.values]
+    # 安全头部
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
-    Referrer-Policy = "no-referrer"
-    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+    
+    # 内容安全策略（CSP）
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.sheetjs.com https://zzyueuweeoakopuuwfau.supabase.co; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://zzyueuweeoakopuuwfau.supabase.co https://*.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';"
+    
+    # HSTS（强制HTTPS）
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    
+    # 缓存控制
+    Cache-Control = "public, max-age=0, must-revalidate"
+    
+    # SEO优化头部
+    X-Robots-Tag = "index, follow"
 
+# HTML文件缓存
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+
+# JavaScript文件缓存（长期缓存）
 [[headers]]
   for = "/*.js"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
 
+# CSS文件缓存（长期缓存）
 [[headers]]
   for = "/*.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
 
+# 图片文件缓存（长期缓存）
 [[headers]]
   for = "/*.jpg"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/*.jpeg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
 
 [[headers]]
   for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/*.gif"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+    Content-Type = "image/svg+xml"
+
+[[headers]]
+  for = "/*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+# 字体文件缓存
+[[headers]]
+  for = "/*.woff"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/*.ttf"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+
+# JSON文件
+[[headers]]
+  for = "/*.json"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    Content-Type = "application/json; charset=utf-8"
+
+# Manifest文件
+[[headers]]
+  for = "/site.webmanifest"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+    Content-Type = "application/manifest+json"
+
+# Sitemap和Robots
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+    Content-Type = "application/xml; charset=utf-8"
+    X-Robots-Tag = "noindex"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+    Content-Type = "text/plain; charset=utf-8"
+
+# Favicon
+[[headers]]
+  for = "/favicon.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.ico"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"

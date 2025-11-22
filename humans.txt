@@ -1,0 +1,47 @@
+/* TEAM */
+  Developer: AI Full-Stack Developer
+  Site: https://maguiweb.netlify.app
+  Location: China
+
+/* SITE */
+  Standards: HTML5, CSS3, JavaScript ES6+
+  Components: Supabase, ECharts, Netlify
+  Software: Cursor AI, Git
+  Language: Chinese / 中文
+
+/* PROJECT */
+  Name: DOPPLER 磁检测仪器控制系统
+  Type: Web Application
+  Version: 1.0.0
+  Build Date: 2025-10-10
+  Description: 专业工业级磁检测仪器Web控制系统
+  Standards: ISO 9934-1:2016
+
+/* THANKS */
+  Supabase - Open source Firebase alternative
+  ECharts - Powerful charting library
+  Netlify - Modern deployment platform
+  Cursor - AI-powered code editor
+
+/* TECHNOLOGIES */
+  - HTML5 & CSS3
+  - JavaScript (ES6+)
+  - Supabase (PostgreSQL, Realtime, Storage, Auth)
+  - ECharts 5.x
+  - jsPDF
+  - SheetJS
+  - Netlify hosting with CDN
+
+/* FEATURES */
+  - 实时双通道磁信号采集
+  - 智能缺陷自动识别
+  - 云端数据存储与同步
+  - 专业PDF/Excel报告生成
+  - 符合ISO 9934-1:2016标准
+  - 60fps流畅波形渲染
+  - 响应式设计，支持多设备
+
+/* CONTACT */
+  Email: support@example.com
+  Website: https://maguiweb.netlify.app
+
